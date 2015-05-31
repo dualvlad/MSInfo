@@ -1,4 +1,5 @@
 #include "mywmi.h"
+#include "save.h"
 #pragma once
 
 namespace project {
@@ -260,6 +261,18 @@ namespace project {
 		dia->RestoreDirectory = true;
 		if ( dia->ShowDialog() == System::Windows::Forms::DialogResult::OK )
 		{
+			switch(dia->FilterIndex)
+			{
+				case 1:
+					saveTXT();
+					break;
+				case 2:
+					savePDF(dia->FileName);
+					break;
+				case 3:
+					saveXLS();
+					break;
+			}
 			//this->label1->Text = dia->FileName;
 			//this->label1->Text = dia->FilterIndex.ToString();
 		} 

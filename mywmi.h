@@ -1,8 +1,9 @@
 #include <vector>
 #include <string>
-#include <iostream>
-#using < system.management.dll>
 
+#include <hpdf.h>
+
+#using < system.management.dll>
 using namespace std;
 using namespace System;
 using namespace System::Management; 
@@ -33,3 +34,5 @@ ManagementObjectCollection::ManagementObjectEnumerator^ mywmi(String^ q)
 
 	return enu;
 } 
+
+void savePDF()
