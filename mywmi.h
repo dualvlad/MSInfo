@@ -1,8 +1,5 @@
 #include <vector>
 #include <string>
-
-#include <hpdf.h>
-
 #using < system.management.dll>
 using namespace std;
 using namespace System;
@@ -16,6 +13,15 @@ void MarshalString ( String ^ s, string& os ) {
    Marshal::FreeHGlobal(IntPtr((void*)chars));
 }
 
+void MarshalString ( String ^ s, wstring& os ) {
+   using namespace Runtime::InteropServices;
+   const wchar_t* chars = 
+      (const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
+   os = chars;
+   Marshal::FreeHGlobal(IntPtr((void*)chars));
+}
+
+
 ManagementObjectCollection::ManagementObjectEnumerator^ mywmi(String^ q)
 {
 	ConnectionOptions^ options = gcnew ConnectionOptions();
@@ -24,8 +30,7 @@ ManagementObjectCollection::ManagementObjectEnumerator^ mywmi(String^ q)
     //options->Authority = "NTLMDomain:";
     options->Impersonation = ImpersonationLevel::Impersonate;
    
-	ManagementScope^ scope = gcnew
-	ManagementScope("\\\\localhost\\root\\CIMV2",options);
+	ManagementScope^ scope = gcnew ManagementScope("\\\\localhost\\root\\CIMV2",options);
     SelectQuery^ processorquery = gcnew SelectQuery(q);
    
 	ManagementObjectSearcher^ query = gcnew ManagementObjectSearcher(scope, processorquery);
@@ -34,5 +39,3 @@ ManagementObjectCollection::ManagementObjectEnumerator^ mywmi(String^ q)
 
 	return enu;
 } 
-
-void savePDF()
